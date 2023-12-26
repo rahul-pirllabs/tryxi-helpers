@@ -2,7 +2,7 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 import binascii
 
-from aes_enc_dec.helpers.salt_helpers import generate_secret_key
+from aesEncDec.salt_helpers import generate_secret_key
 
 
 def aes256_cbc_encrypt(data: str, password: str, iterations: int) -> str:
