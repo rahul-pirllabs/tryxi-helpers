@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+requires-python = ">=3.9"
+name = "tryxi_helpers"
+authors = [
+    {name = "Rahul Anil", email = "rahul@pirllabs.co.in"}
+]
+description = "Helper modules for tryxi"
+version = "0.0.1"
+dynamic = ["dependencies", "optional-dependencies"]
+readme = "README.md"
+
+[tools.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.in"] }
+optional-dependencies.dev = { file = ["dev-requirements.in"] }
+
+[tool.black]
+line-length = 80
+
+[tool.pylint]
+max-line-length = 80
+
+[tool.isort]
+profile = "hug"
