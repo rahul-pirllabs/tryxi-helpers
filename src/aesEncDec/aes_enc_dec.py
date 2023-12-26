@@ -1,6 +1,9 @@
+import base64
+import binascii
+import json
+
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
-import binascii
 
 from aesEncDec.salt_helpers import generate_secret_key
 
@@ -46,7 +49,14 @@ def aes256_cbc_encrypt(data: str, password: str, iterations: int) -> str:
     enc_salt_str = str(salt_hex, "utf-8")
     enc_iv_str = str(iv_hex, "utf-8")
 
-    return {"enc_data": enc_data_str, "salt": enc_salt_str, "iv": enc_iv_str}
+    json_ed = json.dumps(
+        {"enc_data": enc_data_str, "salt": enc_salt_str, "iv": enc_iv_str}
+    )
+    # convert json to base64
+    json_base_64_encode = base64.b64encode(json_ed.encode("utf-8"))
+    # convert byte string to utf-8 string
+    json_base_64_encoded_str = str(json_base_64_encode, "utf-8")
+    return json_base_64_encoded_str
 
 
 def aes256_cbc_decrypt(data: str, password: str, iterations: int) -> str:
@@ -63,10 +73,17 @@ def aes256_cbc_decrypt(data: str, password: str, iterations: int) -> str:
     Raises:
         ValueError: if there is an error in generating the secret key
     """
+    # decode json from base64 to utf-8
+    json_enc = base64.b64decode(data).decode("utf-8")
+    # check if req keys are present otherwise raise error
+    if not all(obj in json_enc for obj in ["enc_data", "salt", "iv"]):
+        raise ValueError("Req keys in json_enc string not found")
+    enc_data = json.loads(json_enc)
+
     # Convert values from string to hex
-    enc_data_hex = binascii.unhexlify(data["enc_data"])
-    salt_hex = binascii.unhexlify(data["salt"])
-    iv_hex = binascii.unhexlify(data["iv"])
+    enc_data_hex = binascii.unhexlify(enc_data["enc_data"])
+    salt_hex = binascii.unhexlify(enc_data["salt"])
+    iv_hex = binascii.unhexlify(enc_data["iv"])
     # Generate the secret key
     try:
         secret_key = generate_secret_key(
