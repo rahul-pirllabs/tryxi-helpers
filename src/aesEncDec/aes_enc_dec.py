@@ -14,7 +14,8 @@ def aes256_cbc_encrypt(data: str, password: str, iterations: int) -> str:
     Args:
         data(str): plaintext to be encrypted.
         password(str): password to be used for encryption
-        iterations(int): number of iterations to be used in PBKDF2 key derivation function.
+        iterations(int): number of iterations to be used in PBKDF2 key derivation
+            function.
 
     Returns:
         str: encrypted data
@@ -65,7 +66,8 @@ def aes256_cbc_decrypt(data: str, password: str, iterations: int) -> str:
     Args:
         data(str): encrypted data.
         password(str): password to be used for decryption
-        iterations(int): number of iterations to be used in PBKDF2 key derivation function.
+        iterations(int): number of iterations to be used in PBKDF2 key derivation
+            function.
 
     Returns:
         str: decrypted data
